@@ -1,0 +1,10 @@
+[package]
+name = "mcp2221"
+description = "MCP2221 I2C/GPIO driver"
+version = "0.1.0"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+
+[dependencies]
+embedded-hal = "0.2.6"
+rusb = "0.8.1"
