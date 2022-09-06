@@ -158,9 +158,6 @@ impl AvailableDevice {
             let bus_number = self.device.bus_number();
 
             let mut handle = self.device.open()?;
-            // if handle.kernel_driver_active(MCP2221A_INTERFACE)? {
-            //     handle.detach_kernel_driver(MCP2221A_INTERFACE)?;
-            // }
             handle.set_auto_detach_kernel_driver(true)?;
             handle.claim_interface(MCP2221A_INTERFACE)?;
             let mut buffer = [0u8; MCP_TRANSFER_SIZE];
