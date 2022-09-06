@@ -140,6 +140,7 @@ impl AvailableDevice {
     /// Attempts to open the I2C device.
     pub fn open(&self, config: &Config) -> Result<Handle> {
         let mut handle = self.open_device(config)?;
+        handle.set_auto_detach_kernel_driver(true)?;
         handle.claim_interface(MCP2221A_INTERFACE)?;
         let mut i2c = Handle {
             handle,
@@ -157,6 +158,10 @@ impl AvailableDevice {
             let bus_number = self.device.bus_number();
 
             let mut handle = self.device.open()?;
+            // if handle.kernel_driver_active(MCP2221A_INTERFACE)? {
+            //     handle.detach_kernel_driver(MCP2221A_INTERFACE)?;
+            // }
+            handle.set_auto_detach_kernel_driver(true)?;
             handle.claim_interface(MCP2221A_INTERFACE)?;
             let mut buffer = [0u8; MCP_TRANSFER_SIZE];
             buffer[..RESET_SEQUENCE.len()].copy_from_slice(&RESET_SEQUENCE);
