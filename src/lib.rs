@@ -140,13 +140,12 @@ impl AvailableDevice {
     /// Attempts to open the I2C device.
     pub fn open(&self, config: &Config) -> Result<Handle> {
         let mut handle = self.open_device(config)?;
-        match handle.set_auto_detach_kernel_driver(true) {
-            Ok(_) => (),
-            Err(error) => match error {
-                rusb::Error::NotSupported => (),
-                _ => panic!("Problem detaching kernel driver: {:?}", error),
-            },
-        };
+        // Setting auto-detach will fail on platforms where it isn't supported
+        // (Windows). So we ignore the returned error in this case. Provided no
+        // driver has already claimed the device, it should be fine to continue.
+        // If some driver has claimed the device, then we'll fail on the next
+        // line when we try to claim it.
+        let _ = handle.set_auto_detach_kernel_driver(true);
         handle.claim_interface(MCP2221A_INTERFACE)?;
         let mut i2c = Handle {
             handle,
@@ -164,13 +163,7 @@ impl AvailableDevice {
             let bus_number = self.device.bus_number();
 
             let mut handle = self.device.open()?;
-            match handle.set_auto_detach_kernel_driver(true) {
-                Ok(_) => (),
-                Err(error) => match error {
-                    rusb::Error::NotSupported => (),
-                    _ => panic!("Problem detaching kernel driver: {:?}", error),
-                },
-            };
+            let _ = handle.set_auto_detach_kernel_driver(true);
             handle.claim_interface(MCP2221A_INTERFACE)?;
             let mut buffer = [0u8; MCP_TRANSFER_SIZE];
             buffer[..RESET_SEQUENCE.len()].copy_from_slice(&RESET_SEQUENCE);
