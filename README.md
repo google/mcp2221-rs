@@ -17,18 +17,17 @@ on more than just Linux.
 
 See [examples/scan_bus.rs](examples/scan_bus.rs).
 
-### Interaction with HID driver
+### Granting access to the device
 
-The hid-mcp2221 kernel driver may interfere with the operation of this library.
-It's recommended to unload it or unbind the device. e.g.  Create
-`/etc/udev/rules.d/71-mcp.rules` with the following content:
+In order to allow access to the USB device, it's recommended to create a udev
+rule. e.g. create `/etc/udev/rules.d/71-mcp.rules` with the following content:
 
 ```
-SUBSYSTEM=="usb", ATTRS{idVendor}=="04d8", ATTRS{idProduct}=="00dd", GROUP="plugdev", TAG+="uaccess", RUN="/bin/sh -c 'echo -n $kernel > /sys/bus/usb/drivers/usbhid/unbind'"
+SUBSYSTEM=="usb", ATTRS{idVendor}=="04d8", ATTRS{idProduct}=="00dd", GROUP="plugdev", TAG+="uaccess"
 ```
 
-This rule also allows access to the device by the user physically logged into
-the computer (uaccess) and to anyone in the plugdev group.
+This rule allows access to the device by the user physically logged into the
+computer (uaccess) and to anyone in the plugdev group.
 
 ### Contributing
 
