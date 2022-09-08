@@ -1,7 +1,7 @@
 # MCP2221-rs
 
 This library allows your code to control an MCP2221 or MCP2221A over USB for the
-purposes of talking I2C for using the GPIO pins. It doesn't support the UART
+purposes of talking I2C or using the GPIO pins. It doesn't support the UART
 feature of the MCP2221 although PRs are welcome.
 
 I2C traits from the [embedded-hal](https://crates.io/crates/embedded-hal) are
